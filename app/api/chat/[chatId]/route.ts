@@ -15,13 +15,13 @@ const genAI = new GoogleGenerativeAI(apiKey);
 const MODEL = "intfloat/multilingual-e5-large";
 const HUGGINGFACE_API_TOKEN = process.env.HUGGINGFACE_API_TOKEN;
 
-dotenv.config({ path: `.env` });
+const index = new Pinecone({
+  apiKey: process.env.PINECONE_API_KEY!,
+})
+  .index("companion")
+  .namespace("ns1");
 
-// const index = new Pinecone({
-//   apiKey: process.env.PINECONE_API_KEY!,
-// })
-//   .index("companion")
-//   .namespace("ns1");
+dotenv.config({ path: `.env` });
 
 async function fetchEmbeddingsWithRetry(text: string, retries = 5) {
   for (let attempt = 1; attempt <= retries; attempt++) {
@@ -93,12 +93,6 @@ export async function POST(
 
     const name = companion.id;
     const companion_file_name = name + ".txt";
-
-    const index = new Pinecone({
-      apiKey: process.env.PINECONE_API_KEY!,
-    })
-      .index("companion")
-      .namespace("ns1");
 
     const companionKey = {
       companionName: name,
