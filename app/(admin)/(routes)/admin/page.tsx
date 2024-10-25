@@ -63,9 +63,9 @@ const Admin = async () => {
               Recent Activity
             </h3>
             <ul className="mt-4 space-y-2 text-gray-300">
-              <li>John Doe created an avatar "Elon AI"</li>
+              <li>John Doe created an avatar &quot;Elon AI&quot;</li>
               <li>Jane Smith granted permissions</li>
-              <li>"Steve AI" avatar was updated</li>
+              <li>&quot;Steve AI&quot; avatar was updated</li>
             </ul>
           </div>
         </div>
