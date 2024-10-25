@@ -42,7 +42,7 @@ export default function ChatHeader({ companion }: ChatHeaderProps) {
         description: "Success."
       });
       router.refresh();
-      router.push("/");
+      router.push("/dashboard");
     } catch (error) {
       toast({
         variant: "destructive",

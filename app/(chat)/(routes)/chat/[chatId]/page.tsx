@@ -22,7 +22,7 @@ export default async function ChatIdPage({ params }: ChatIdPageProps) {
     }
   });
 
-  if (!companion) return redirect("/");
+  if (!companion) return redirect("/dashboard");
 
   return <ChatClient companion={companion} />;
 }

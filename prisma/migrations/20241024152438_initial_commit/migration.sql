@@ -1,12 +1,33 @@
 -- CreateEnum
 CREATE TYPE "Role" AS ENUM ('user', 'system');
 
+-- CreateEnum
+CREATE TYPE "UserRole" AS ENUM ('super', 'staff');
+
+-- CreateTable
+CREATE TABLE "User" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "userEmail" TEXT NOT NULL,
+    "role" "UserRole" NOT NULL,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateTable
 CREATE TABLE "Category" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
 
     CONSTRAINT "Category_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Tag" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "Tag_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -51,6 +72,24 @@ CREATE TABLE "UserSubscription" (
     CONSTRAINT "UserSubscription_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "_CompanionToTag" (
+    "A" TEXT NOT NULL,
+    "B" TEXT NOT NULL
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_userEmail_key" ON "User"("userEmail");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Tag_name_key" ON "Tag"("name");
+
+-- CreateIndex
+CREATE INDEX "Tag_name_idx" ON "Tag"("name");
+
+-- CreateIndex
+CREATE INDEX "Companion_name_idx" ON "Companion"("name");
+
 -- CreateIndex
 CREATE INDEX "Companion_categoryId_idx" ON "Companion"("categoryId");
 
@@ -65,3 +104,9 @@ CREATE UNIQUE INDEX "UserSubscription_stripe_customer_id_key" ON "UserSubscripti
 
 -- CreateIndex
 CREATE UNIQUE INDEX "UserSubscription_stripe_subscription_id_key" ON "UserSubscription"("stripe_subscription_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_CompanionToTag_AB_unique" ON "_CompanionToTag"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_CompanionToTag_B_index" ON "_CompanionToTag"("B");

@@ -13,9 +13,9 @@ import { cn } from "@/lib/utils";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "AI Companion",
+  title: "CompanionX",
   description:
-    "AI Companion made using Next.js, React.js, TypeScript, TailwindCSS, Prisma & Stripe."
+    "Chat with Companion of your choice and interest."
 };
 
 export default function RootLayout({

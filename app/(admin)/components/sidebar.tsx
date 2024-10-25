@@ -1,44 +1,50 @@
 "use client";
 
 import React from "react";
-import { Home, Plus, Settings, StoreIcon } from "lucide-react";
+import { Home, User, Settings, StoreIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
-import { useProModal } from "@/hooks/use-pro-modal";
+// import { useProModal } from "@/hooks/use-pro-modal";
 
-interface SidebarProps {
-  isPro: boolean;
-}
+// interface SidebarProps {
+//   isPro: boolean;
+// }
 
-export default function Sidebar({ isPro }: SidebarProps) {
+export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const proModal = useProModal();
+//   const proModal = useProModal();
 
   const routes = [
     {
       icon: Home,
-      href: "/dashboard",
+      href: "/admin",
       label: "Dashboard",
       pro: false
     },
     {
       icon: StoreIcon,
-      href: "/companion/new",
+      href: "/admin/companion/new",
       label: "Create",
-      pro: true
+      pro: false
+    },
+    {
+      icon: User,
+      href: "/admin/companions",
+      label: "Companions",
+      pro: false,
     },
     {
       icon: Settings,
-      href: "/settings",
+      href: "/admin/settings",
       label: "Settings",
       pro: false
     }
   ];
 
   const onNavigate = (url: string, pro: boolean) => {
-    if (pro && !isPro) return proModal.onOpen();
+    // if (pro && !isPro) return proModal.onOpen();
 
     return router.push(url);
   };

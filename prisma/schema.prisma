@@ -9,10 +9,24 @@ datasource db {
   relationMode = "prisma"
 }
 
+model User {
+  id        String   @id @default(uuid())
+  userEmail String   @unique
+  role      UserRole
+}
+
 model Category {
   id         String      @id @default(uuid())
   name       String
   companions Companion[]
+}
+
+model Tag {
+  id         String      @id @default(uuid())
+  name       String      @unique
+  companions Companion[]
+
+  @@index([name])
 }
 
 model Companion {
@@ -31,15 +45,22 @@ model Companion {
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId String
 
+  tags     Tag[]
   messages Message[]
   // @@fulltext([name])
-
+  
+  @@index([name])
   @@index([categoryId])
 }
 
 enum Role {
   user
   system
+}
+
+enum UserRole {
+  super
+  staff
 }
 
 model Message {

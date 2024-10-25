@@ -12,9 +12,6 @@ export async function GET() {
     const { userId } = auth();
     const user = await currentUser();
 
-    console.log("user", user);
-    console.log("user id", userId);
-
     if (!userId || !user) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -30,8 +27,6 @@ export async function GET() {
         customer: userSubscription.stripeCustomerId,
         return_url: settingsUrl
       });
-
-      console.log(stripeSession);
 
       return new NextResponse(JSON.stringify({ url: stripeSession.url }));
     }
@@ -63,8 +58,6 @@ export async function GET() {
         userId
       }
     });
-
-    console.log(stripeSession);
 
 
     return new NextResponse(JSON.stringify({ url: stripeSession.url }));
