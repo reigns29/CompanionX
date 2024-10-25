@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Home, Plus, Settings, StoreIcon } from "lucide-react";
+import { Home, Save, Settings, StoreIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
@@ -26,13 +26,19 @@ export default function Sidebar({ isPro }: SidebarProps) {
     {
       icon: StoreIcon,
       href: "/companion/new",
-      label: "Create",
+      label: "Store",
       pro: true
     },
     {
       icon: Settings,
       href: "/settings",
       label: "Settings",
+      pro: false
+    },
+    {
+      icon: Save,
+      href: "/saved",
+      label: "Saved",
       pro: false
     }
   ];

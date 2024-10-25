@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useTheme } from "next-themes";
 import { BeatLoader } from "react-spinners";
-import { Copy, Volume1, Zap } from "lucide-react";
+import { Copy, Volume1, Zap, Save } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
@@ -20,8 +20,9 @@ export interface ChatMessageProps {
 }
 
 interface Suggestion {
-  id: Number;
-  title: String;
+  Type: string;
+  Name: string;
+  Link: string;
 }
 
 export default function ChatMessage({
@@ -34,17 +35,20 @@ export default function ChatMessage({
   const { theme } = useTheme();
 
   const [openChats, setOpenChats] = useState([]);
-  const [suggestions, setSuggestions] = useState([
-    { id: 1, title: "Book: Zero to One" },
-    { id: 2, title: "Course: Innovation Management" },
-    { id: 3, title: 'Quote: "Failure is a stepping stone"' }
-  ]);
+  const [suggestions, setSuggestions] = useState<null | Suggestion[]>(null);
+  const [suggestionLoading, setSuggestionLoading] = useState(false);
   const handleSuggestions = async () => {
+    setSuggestionLoading(true);
     console.log(content);
-    const response = await axios.post("/api/suggestions", {
+    const response = await axios.post("/api/suggestions/generate", {
       content: content
     });
-    console.log(response.data.data.answer);
+    let cleanedResponse = response.data.data.answer;
+    cleanedResponse = cleanedResponse.slice(7, -3);
+    let jsonArray = JSON.parse(cleanedResponse);
+    setSuggestions(jsonArray);
+    setSuggestionLoading(false);
+    console.log(jsonArray);
   };
 
   const onCopy = () => {
@@ -59,6 +63,16 @@ export default function ChatMessage({
     const utterance = new SpeechSynthesisUtterance(content);
     utterance.lang = "en-US";
     speechSynthesis.speak(utterance);
+  };
+
+  const handleSaveSuggestion = async (suggestion: Suggestion) => {
+    const response = await axios.post("/api/suggestions/save", {
+      suggestion
+    });
+    console.log(response);
+    toast({
+      description: "Suggestion saved successfully."
+    });
   };
 
   return (
@@ -106,20 +120,40 @@ export default function ChatMessage({
               variant="ghost"
             >
               <Zap className="w-4 h-4" />
+              <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-gray-800 text-white rounded shadow-lg hidden group-hover:block">
+                Suggestions
+              </div>
             </Button>
           </div>
         )}
       </div>
-      <div className="max-w-[400px] ml-14 flex flex-wrap space-x-2 space-y-2">
-        {role !== "user" &&
-          suggestions.map((suggestion: Suggestion) => (
-            <div key={suggestion.id as React.Key}>
-              <button className="bg-gray-800 rounded-md text-xs">
-                {suggestion.title}
-              </button>
-            </div>
-          ))}
-      </div>
+      {!suggestionLoading ? (
+        <div className="max-w-[400px] ml-14 flex flex-col space-x-2 space-y-2">
+          {role !== "user" &&
+            suggestions &&
+            suggestions.map((suggestion: Suggestion) => (
+              <div
+                className="flex space-x-1"
+                key={suggestion.Link as React.Key}
+              >
+                <button className="bg-gray-800 rounded-md text-xs">
+                  {suggestion.Type}:{" "}
+                  <a href={suggestion.Link} target="_blank">
+                    {suggestion.Name}
+                  </a>
+                </button>
+                <button onClick={() => handleSaveSuggestion(suggestion)}>
+                  <Save className="w-3 h-3" />
+                </button>
+              </div>
+            ))}
+        </div>
+      ) : (
+        <div className="ml-14">
+          <h1 className="text-xs text-green-700">Generating Suggestions</h1>
+          <BeatLoader size={5} color={theme === "light" ? "black" : "white"} />
+        </div>
+      )}
     </div>
   );
 }
