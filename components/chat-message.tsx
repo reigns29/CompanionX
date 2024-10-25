@@ -113,9 +113,11 @@ export default function ChatMessage({
       <div className="max-w-[400px] ml-14 flex flex-wrap space-x-2 space-y-2">
         {role !== "user" &&
           suggestions.map((suggestion: Suggestion) => (
-            <button className="bg-gray-800 rounded-md text-xs">
-              {suggestion.title}
-            </button>
+            <div key={suggestion.id as React.Key}>
+              <button className="bg-gray-800 rounded-md text-xs">
+                {suggestion.title}
+              </button>
+            </div>
           ))}
       </div>
     </div>
