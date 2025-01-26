@@ -9,6 +9,7 @@ interface ResponseCount {
   count: number;
 }
 
+
 interface BarChartProps {
   data: ResponseCount[];
 }

@@ -63,7 +63,11 @@ export async function POST(
   { params }: { params: { chatId: string } }
 ) {
   try {
-    const { prompt } = await request.json();
+    const { prompt, file, name: myname } = await request.json();
+    // console.log(body);
+    // const prompt = body.prompt;
+    // const file = body.file;
+    console.log(file, myname);
     const user = await currentUser();
     console.log("Prompt", prompt);
 
